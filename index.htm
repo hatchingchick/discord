@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .link {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Discord Link Checker</h1>
+      <div id="log"></div>
+    </div>
+
+    <script>
+      const DiscordLinks = [
+        "https://discord.gg/",
+        "game-name-1",
+        "game-name-2",
+        "game-name-3",
+        ...
+      ];
+
+      const logContainer = document.querySelector("#log");
+
+      DiscordLinks.forEach(link => {
+        fetch(link)
+          .then(response => {
+            if (response.ok) {
+              logContainer.innerHTML += `<p class="link">${link} is valid!</p>`;
+            } else {
+              logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
+            }
+          })
+          .catch(error => {
+            logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
+            console.error(error);
+          });
+      });
+    </script>
+  </body>
+</html>
