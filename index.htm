@@ -3,71 +3,67 @@
   <head>
     <style>
       body {
-        background-image: url("https://wallpaperaccess.com/full/5578381.jpg");
+        background-image: url(https://wallpaperaccess.com/full/5578381.jpg);
         background-size: cover;
-        margin: 0;
-        padding: 0;
-      }
-
-      .container {
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        justify-content: center;
       }
 
-      .link {
-        margin-top: 10px;
+      h1 {
         color: white;
       }
 
-      .button {
-        background-color: #7289da;
-        border-radius: 50px;
+      button {
+        background-color: #7289DA;
+        color: white;
         padding: 10px 20px;
-        color: white;
-        font-weight: bold;
-        text-decoration: none;
-        margin-top: 20px;
-        box-shadow: 0px 5px 10px #888888;
+        border-radius: 4px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Discord Link Checker</h1>
-      <div id="log"></div>
-      <a class="button" href="#">Check links</a>
-    </div>
-
+    <h1>Discord Link Checker</h1>
+    <div id="result"></div>
     <script>
-      const DiscordLinks = [
-        "https://discord.gg/",
-        "game-name-1",
-        "game-name-2",
-        "game-name-3",
-        ...
-      ];
+      // Generate a random 8-character string
+      function generateInviteCode() {
+        let inviteCode = "";
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (let i = 0; i < 8; i++) {
+          inviteCode += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return inviteCode;
+      }
 
-      const logContainer = document.querySelector("#log");
-      const checkButton = document.querySelector(".button");
+      // Check the Discord link
+      function checkDiscordLink() {
+        const discordLink = "https://discord.gg/" + generateInviteCode();
+        const xhr = new XMLHttpRequest();
+        xhr.open("HEAD", discordLink, true);
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE) {
+            const resultContainer = document.getElementById("result");
+            if (this.status === 200) {
+              resultContainer.innerHTML = "Found: " + discordLink;
+            } else {
+              resultContainer.innerHTML = "Not found: " + discordLink;
+            }
+          }
+        };
+        xhr.send();
+      }
 
-      checkButton.addEventListener("click", () => {
-        DiscordLinks.forEach(link => {
-          fetch(link)
-            .then(response => {
-              if (response.ok) {
-                logContainer.innerHTML += `<p class="link">${link} is valid!</p>`;
-              } else {
-                logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
-              }
-            })
-            .catch(error => {
-              logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
-              console.error(error);
-            });
-        });
-      });
+      // Add a button to generate and check the Discord link
+      const button = document.createElement("button");
+      button.innerHTML = "Check Discord Link";
+      button.addEventListener("click", checkDiscordLink);
+      document.body.appendChild(button);
     </script>
   </body>
 </html>
