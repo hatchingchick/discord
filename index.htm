@@ -2,6 +2,13 @@
 <html>
   <head>
     <style>
+      body {
+        background-image: url("https://wallpaperaccess.com/full/5578381.jpg");
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+      }
+
       .container {
         display: flex;
         flex-direction: column;
@@ -11,6 +18,18 @@
 
       .link {
         margin-top: 10px;
+        color: white;
+      }
+
+      .button {
+        background-color: #7289da;
+        border-radius: 50px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        margin-top: 20px;
+        box-shadow: 0px 5px 10px #888888;
       }
     </style>
   </head>
@@ -18,6 +37,7 @@
     <div class="container">
       <h1>Discord Link Checker</h1>
       <div id="log"></div>
+      <a class="button" href="#">Check links</a>
     </div>
 
     <script>
@@ -30,20 +50,23 @@
       ];
 
       const logContainer = document.querySelector("#log");
+      const checkButton = document.querySelector(".button");
 
-      DiscordLinks.forEach(link => {
-        fetch(link)
-          .then(response => {
-            if (response.ok) {
-              logContainer.innerHTML += `<p class="link">${link} is valid!</p>`;
-            } else {
+      checkButton.addEventListener("click", () => {
+        DiscordLinks.forEach(link => {
+          fetch(link)
+            .then(response => {
+              if (response.ok) {
+                logContainer.innerHTML += `<p class="link">${link} is valid!</p>`;
+              } else {
+                logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
+              }
+            })
+            .catch(error => {
               logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
-            }
-          })
-          .catch(error => {
-            logContainer.innerHTML += `<p class="link">${link} is not valid!</p>`;
-            console.error(error);
-          });
+              console.error(error);
+            });
+        });
       });
     </script>
   </body>
